@@ -1,0 +1,102 @@
+$mobile = 420px
+$tablet = 768px
+$laptop = 992px
+$laptop_L = 1280px
+
+RWD-above($width)
+  media = 'all and (min-width: %s)' % $width
+
+  @media media
+    {block}
+
+mobile($width, $context = $tablet)
+  unit(($width / $context) * 100, '%')
+
+.live
+  display none
+  position fixed
+  bottom 0
+  right 0
+  font-size 0px
+  width calc((180px / 1.2))
+  -webkit-overflow-scrolling touch
+
+  +RWD-above($tablet)
+    width 180px
+
+  &[data-is-open=true]
+    display inline-block
+
+  &__bar
+    text-align center
+    background-color #F7F7F7
+
+    &__space
+      display inline-block
+      width calc(100% - 54px)
+      height 20px
+      vertical-align middle
+
+    &__back
+      width 11px
+      height 11px
+      display inline-block
+      cursor pointer
+      vertical-align middle
+      margin 8px 0 8px 8px
+
+      +RWD-above($tablet)
+        margin 8px 0 8px 16px
+
+    &__cross
+      display inline-block
+      cursor pointer
+      width 11px
+      height 11px
+      vertical-align middle
+      margin 8px 16px 8px 0
+
+      +RWD-above($tablet)
+        margin 8px 8px 8px 0
+
+  &__iframe
+    width 100%
+    height calc((320px / 1.2))
+    border none
+
+    +RWD-above($tablet)
+      height 320px
+
+.cross
+  position relative
+
+  &:before,
+  &:after
+    position absolute
+    left 5px
+    display inline-block
+    content ''
+    height 100%
+    width 1px
+    background-color #38C2CD
+
+  &:before
+    transform rotate(45deg)
+
+  &:after
+    transform rotate(-45deg)
+
+.back
+  position relative
+
+  &:before
+    content ''
+    display inline-block
+    position absolute
+    left 4px
+    top 2px
+    width 50%
+    height 50%
+    border-top 1px solid #38C2CD
+    border-left 1px solid #38C2CD
+    transform rotate(-45deg)

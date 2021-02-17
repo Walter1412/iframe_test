@@ -4,7 +4,7 @@ import './styles.styl';
   let mousePosition = null;
   let amwayLive = null;
   let liveBarSpace = null;
-  let offset = [0, 0];
+  let offset = null;
   let isDown = false;
   window.onload = () => {
     checkQuery('t');
@@ -17,7 +17,10 @@ import './styles.styl';
       e => {
         e.preventDefault();
         isDown = true;
-        offset = [amwayLive.offsetLeft - e.touches[0].pageX, amwayLive.offsetTop - e.touches[0].pageY];
+        // offset = [amwayLive.offsetLeft - e.touches[0].pageX, amwayLive.offsetTop - e.touches[0].pageY];
+        if (offset === null) {
+          offset = [event.touches[0].pageX, event.touches[0].pageY];
+        }
       },
       true,
     );
@@ -36,17 +39,23 @@ import './styles.styl';
             x: event.touches[0].pageX,
             y: event.touches[0].pageY,
           };
-          amwayLive.style.left = mousePosition.x + offset[0] + 'px';
-          amwayLive.style.top = mousePosition.y + offset[1] + 'px';
+          amwayLive.style.transform = `translate(${mousePosition.x - offset[0]}px,${mousePosition.y - offset[1]}px)`;
+          // amwayLive.style.left = mousePosition.x + offset[0] + 'px';
+          // amwayLive.style.top = mousePosition.y + offset[1] + 'px';
         }
       },
       true,
     );
     liveBarSpace.addEventListener(
       'mousedown',
-      e => {
+      event => {
         isDown = true;
-        offset = [amwayLive.offsetLeft - e.clientX, amwayLive.offsetTop - e.clientY];
+        // if (offset === null) {
+        //   offset = [amwayLive.offsetLeft - e.clientX, amwayLive.offsetTop - e.clientY];
+        // }
+        if (offset === null) {
+          offset = [event.clientX, event.clientY];
+        }
       },
       true,
     );
@@ -61,13 +70,17 @@ import './styles.styl';
       'mousemove',
       event => {
         event.preventDefault();
+
         if (isDown) {
           mousePosition = {
             x: event.clientX,
             y: event.clientY,
           };
-          amwayLive.style.left = mousePosition.x + offset[0] + 'px';
-          amwayLive.style.top = mousePosition.y + offset[1] + 'px';
+
+          amwayLive.style.transform = `translate(${mousePosition.x - offset[0]}px,${mousePosition.y - offset[1]}px)`;
+
+          // amwayLive.style.left = mousePosition.x + offset[0] + 'px';
+          // amwayLive.style.top = mousePosition.y + offset[1] + 'px';
         }
       },
       true,

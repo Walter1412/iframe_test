@@ -9,6 +9,7 @@ import './styles.styl';
   window.onload = () => {
     checkQuery('t');
     checkQuery('hl');
+    if (!isCreateIframe()) return false;
     createHTMLIframe();
     setIframe();
     clickEvent();
@@ -17,21 +18,20 @@ import './styles.styl';
       e => {
         e.preventDefault();
         isDown = true;
-        // offset = [amwayLive.offsetLeft - e.touches[0].pageX, amwayLive.offsetTop - e.touches[0].pageY];
         if (offset === null) {
           offset = [event.touches[0].pageX, event.touches[0].pageY];
         }
       },
       true,
     );
-    document.addEventListener(
+    liveBarSpace.addEventListener(
       'touchend',
       () => {
         isDown = false;
       },
       true,
     );
-    document.addEventListener(
+    liveBarSpace.addEventListener(
       'touchmove',
       event => {
         if (isDown) {
@@ -40,8 +40,6 @@ import './styles.styl';
             y: event.touches[0].pageY,
           };
           amwayLive.style.transform = `translate(${mousePosition.x - offset[0]}px,${mousePosition.y - offset[1]}px)`;
-          // amwayLive.style.left = mousePosition.x + offset[0] + 'px';
-          // amwayLive.style.top = mousePosition.y + offset[1] + 'px';
         }
       },
       true,
@@ -50,16 +48,13 @@ import './styles.styl';
       'mousedown',
       event => {
         isDown = true;
-        // if (offset === null) {
-        //   offset = [amwayLive.offsetLeft - e.clientX, amwayLive.offsetTop - e.clientY];
-        // }
         if (offset === null) {
           offset = [event.clientX, event.clientY];
         }
       },
       true,
     );
-    document.addEventListener(
+    liveBarSpace.addEventListener(
       'mouseup',
       () => {
         isDown = false;
@@ -78,14 +73,19 @@ import './styles.styl';
           };
 
           amwayLive.style.transform = `translate(${mousePosition.x - offset[0]}px,${mousePosition.y - offset[1]}px)`;
-
-          // amwayLive.style.left = mousePosition.x + offset[0] + 'px';
-          // amwayLive.style.top = mousePosition.y + offset[1] + 'px';
         }
       },
       true,
     );
   };
+  window.addEventListener(
+    'resize',
+    function () {
+      offset = null;
+      amwayLive.style.transform = '';
+    },
+    { passive: true },
+  );
   function checkQuery(name) {
     const value = getParameterByName(name);
     if (isValid(value)) {
@@ -99,25 +99,30 @@ import './styles.styl';
       return true;
     }
   }
+  function isCreateIframe() {
+    const t = window.sessionStorage.getItem('t');
+    // const hl = window.sessionStorage.getItem('hl');
+    return isValid(t);
+  }
   function createHTMLIframe() {
     amwayLive = document.createElement('div');
     amwayLive.id = 'amwayLive';
-    amwayLive.className = 'live';
+    amwayLive.className = 'amwayLive';
     amwayLive.setAttribute('data-is-open', true);
-    const str = `<div class="live__bar"><div id="live__bar__back" class="live__bar__back back"></div><div id="live__bar__space" class="live__bar__space"></div><div id="live__bar__cross" class="live__bar__cross cross"></div></div><div class="live__html"><iframe id="live__iframe" class="live__iframe"></iframe><div class=""live__html__back></div></div>`;
+    const str = `<div class="amwayLive__bar"><div id="amwayLive__bar__back" class="amwayLive__bar__back back"></div><div id="amwayLive__bar__space" class="amwayLive__bar__space"></div><div id="amwayLive__bar__cross" class="amwayLive__bar__cross cross"></div></div><div class="amwayLive__html"><iframe id="amwayLive__iframe" class="amwayLive__iframe"></iframe><div class=""amwayLive__html__back></div></div>`;
     amwayLive.innerHTML = str;
     document.body.appendChild(amwayLive);
-    liveBarSpace = document.getElementById('live__bar__space');
+    liveBarSpace = document.getElementById('amwayLive__bar__space');
   }
   function setIframe() {
-    let liveIframe = document.getElementById('live__iframe');
+    let liveIframe = document.getElementById('amwayLive__iframe');
     const t = window.sessionStorage.getItem('t');
     const hl = window.sessionStorage.getItem('hl');
     liveIframe.src = `https://player.live.kkstream.io?t=${t}&hl=${hl}`;
   }
   function clickEvent() {
-    let cross = document.getElementById('live__bar__cross');
-    let back = document.getElementById('live__bar__back');
+    let cross = document.getElementById('amwayLive__bar__cross');
+    let back = document.getElementById('amwayLive__bar__back');
     cross.onclick = event => {
       event.preventDefault();
       amwayLive.setAttribute('data-is-open', false);

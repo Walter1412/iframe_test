@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": " Tracked Time",
+  "version": "1.0",
+  "description": "記錄你的時間",
+  "icons": { "19": "images/free-icon.png" },
+  "browser_action": {
+    "default_icon": "images/free-icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Modify default settings"
+  },
+  "permissions": [
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "run_at": "document_end",
+      "js": ["./src/index.js"]
+    }
+  ]
+}

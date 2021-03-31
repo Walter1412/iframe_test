@@ -19,6 +19,7 @@ mobile($width, $context = $tablet)
   right 0
   font-size 0px
   width calc((180px / 1.2))
+  z-index 99999999999999
   -webkit-overflow-scrolling touch
 
   +RWD-above($tablet)
@@ -62,6 +63,7 @@ mobile($width, $context = $tablet)
   &__iframe
     width 100%
     height calc((320px / 1.2))
+    display inherit
     border none
 
     +RWD-above($tablet)

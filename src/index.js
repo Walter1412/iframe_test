@@ -9,6 +9,7 @@ import './styles.styl';
   window.onload = () => {
     checkQuery('t');
     checkQuery('hl');
+    checkQuery('room');
     if (!isCreateIframe()) return false;
     createHTMLIframe();
     setIframe();
@@ -109,7 +110,9 @@ import './styles.styl';
     amwayLive.id = 'amwayLive';
     amwayLive.className = 'amwayLive';
     amwayLive.setAttribute('data-is-open', true);
-    const str = `<div class="amwayLive__bar"><div id="amwayLive__bar__back" class="amwayLive__bar__back back"></div><div id="amwayLive__bar__space" class="amwayLive__bar__space"></div><div id="amwayLive__bar__cross" class="amwayLive__bar__cross cross"></div></div><div class="amwayLive__html"><iframe id="amwayLive__iframe" class="amwayLive__iframe"></iframe><div class=""amwayLive__html__back></div></div>`;
+    const isRoomDisplay = isValid(window.sessionStorage.getItem('room'))
+
+    const str = `<div class="amwayLive__bar"><div id="amwayLive__bar__back" class="amwayLive__bar__back back" data-is-display=${isRoomDisplay}></div><div id="amwayLive__bar__space" class="amwayLive__bar__space"></div><div id="amwayLive__bar__cross" class="amwayLive__bar__cross cross"></div></div><div class="amwayLive__html"><iframe id="amwayLive__iframe" class="amwayLive__iframe"></iframe><div class=""amwayLive__html__back></div></div>`;
     amwayLive.innerHTML = str;
     document.body.appendChild(amwayLive);
     liveBarSpace = document.getElementById('amwayLive__bar__space');
@@ -129,7 +132,10 @@ import './styles.styl';
     };
     back.onclick = event => {
       event.preventDefault();
-      window.location.href = 'https://live.amwaynet.com.tw/liveRoom?roomId=11';
+      const roomId = window.sessionStorage.getItem('room');
+      if (isValid(roomId)) {
+        window.location.href = `https://live.amwaynet.com.tw/liveRoom?roomId=${roomId}`;
+      }
     };
   }
   function getParameterByName(name, url = window.location.href) {

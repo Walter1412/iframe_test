@@ -59,15 +59,17 @@ mobile($width, $context = $tablet)
 
       +RWD-above($tablet)
         margin 8px 8px 8px 0
-
-  &__iframe
+  &__html
     width 100%
     height calc((320px / 1.2))
-    display inherit
-    border none
-
     +RWD-above($tablet)
       height 320px
+
+    &__iframe
+      width 100%
+      height 100%
+      display inherit
+      border none
 
   .cross
     position relative

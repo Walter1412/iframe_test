@@ -1,5 +1,5 @@
 // import "./styles.scss";
-// import './styles.styl';
+import './styles.styl';
 (window => {
   let mousePosition = null;
   let amwayLive = null;
@@ -110,9 +110,9 @@
     amwayLive.id = 'amwayLive';
     amwayLive.className = 'amwayLive';
     amwayLive.setAttribute('data-is-open', true);
-    const isRoomDisplay = isValid(window.sessionStorage.getItem('room'))
+    const isRoomDisplay = isValid(window.sessionStorage.getItem('room'));
 
-    const str = `<div class="amwayLive__bar"><div id="amwayLive__bar__back" class="amwayLive__bar__back back" data-is-display=${isRoomDisplay}></div><div id="amwayLive__bar__space" class="amwayLive__bar__space"></div><div id="amwayLive__bar__cross" class="amwayLive__bar__cross cross"></div></div><div class="amwayLive__html"><iframe id="amwayLive__iframe" class="amwayLive__iframe"></iframe><div class=""amwayLive__html__back></div></div>`;
+    const str = `<div class="amwayLive__bar"><div id="amwayLive__bar__back" class="amwayLive__bar__back back" data-is-display=${isRoomDisplay}></div><div id="amwayLive__bar__space" class="amwayLive__bar__space"></div><div id="amwayLive__bar__cross" class="amwayLive__bar__cross cross"></div></div><div class="amwayLive__html"><iframe id="amwayLive__iframe" class="amwayLive__html__iframe"></iframe><div class=""amwayLive__html__back></div></div>`;
     amwayLive.innerHTML = str;
     document.body.appendChild(amwayLive);
     liveBarSpace = document.getElementById('amwayLive__bar__space');
@@ -146,4 +146,23 @@
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
+
+  window.addEventListener('message', e => {
+    const iframeEvent = e.data;
+    console.log('iframe',iframeEvent)
+    if (iframeEvent) {
+      if (iframeEvent.type === 'PAUSE') {
+        // pause button is clicked
+        console.log('pause :>> ');
+      } else if (iframeEvent.type === 'PLAY') {
+        // play button is clicked
+        console.log('play :>> ');
+      } else if (iframeEvent.type === 'TIME_CHANGED') {
+        // for vods it gets current video time in seconds
+        // for live events it gets timestamp for the current segment
+        const currentTime = iframeEvent.data; // do something with currentTime...
+        console.log('currentTime :>> ', currentTime);
+      }
+    }
+  });
 })(window);
